@@ -1,0 +1,22 @@
+
+fieldset.workflowmap_status_overview {
+    float: right;
+}
+
+fieldset.workflowmap_action {
+    padding-right: 2em;
+}
+
+/* -- plone default statuses -- */
+
+.state-private-colorized {
+    background-color: #FFFFC0 !important;
+}
+
+.state-published-colorized {
+    background-color: #C6EBB5 !important;
+}
+
+.state-pending-colorized {
+    background-color: #FFAE63 !important;
+}

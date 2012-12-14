@@ -1,0 +1,64 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2012-12-07 11:14+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: ftw.statusmap\n"
+
+#. Default: "Change"
+#: ./ftw/statusmap/browser/statusmap.pt:127
+msgid "label_change"
+msgstr ""
+
+#. Default: "Comment"
+#: ./ftw/statusmap/browser/statusmap.pt:123
+msgid "label_comment"
+msgstr ""
+
+#. Default: "Status"
+#: ./ftw/statusmap/browser/statusmap.pt:64
+msgid "label_status"
+msgstr ""
+
+#. Default: "Title"
+#: ./ftw/statusmap/browser/statusmap.pt:62
+msgid "label_title"
+msgstr ""
+
+#. Default: "Transaction"
+#: ./ftw/statusmap/browser/statusmap.pt:38
+msgid "label_transaction"
+msgstr ""
+
+#. Default: "Type"
+#: ./ftw/statusmap/browser/statusmap.pt:63
+msgid "label_type"
+msgstr ""
+
+#. Default: "Workflow Map"
+#: ./ftw/statusmap/browser/statusmap.pt:29
+msgid "label_workflow_map"
+msgstr ""
+
+#. Default: "Please select a Transition"
+#: ./ftw/statusmap/browser/statusmap.py:25
+msgid "msg_no_transtion"
+msgstr ""
+
+#. Default: "Please select at least one Item"
+#: ./ftw/statusmap/browser/statusmap.py:29
+msgid "msg_no_uids"
+msgstr ""
+

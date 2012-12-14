@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="ftw.statusmap">
+
+      <!-- Resource directory -->
+    <browser:resourceDirectory
+        name="ftw.statusmap"
+        directory="resource"
+        />
+
+    <browser:page
+        for="*"
+        name="statusmap"
+        permission="zope2.View"
+        class=".statusmap.StatusMap"
+        />
+
+</configure>

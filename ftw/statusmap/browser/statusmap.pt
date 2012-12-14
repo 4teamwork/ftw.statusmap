@@ -1,0 +1,133 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="ftw.statusmap">
+
+    <head>
+        <metal:javascriptslot fill-slot="javascript_head_slot">
+            <script type="text/javascript" src="++resource++ftw.statusmap/statusmap.js">
+            </script>
+            <script type="text/javascript" tal:content="view/get_allowed_transitions">
+</script>
+        </metal:javascriptslot>
+
+        <metal:cssslot fill-slot="css_slot">
+            <link rel="stylesheet" type="text/css" media="screen"
+                    href="++resource++ftw.statusmap/statusmap.css" />
+        </metal:cssslot>
+        <metal:block fill-slot="column_two_slot" />
+    </head>
+
+
+
+<body>
+<metal:main fill-slot="main">
+
+    <div metal:define-macro="main">
+
+        <h1 class="documentFirstHeading"
+            i18n:translate="label_workflow_map">Workflow Map</h1>
+        <p class="descreet"></p>
+
+
+        <form action="" method="POST">
+
+            <!-- ACTION -->
+            <fieldset class="workflowmap_action">
+                <legend i18n:translate="label_transaction">Transaction</legend>
+                        <tal:repeat_transition
+                                repeat="transition view/list_transitions">
+                            <div tal:define="name python:transition[0];
+                                             title python:transition[1]"
+                                    tal:attributes="class string:transition-${name}-colorized;">
+                                <input type="radio"
+                                        onclick="statusmap.selectTransition(this);"
+                                        tal:attributes="value name;
+                                                        id name;
+                                                        name string:transition;
+                                                        "/>
+                                <label for="" tal:attributes="for name" i18n:translate="" i18n:domain="plone"
+                                        tal:content="python:title" />
+                            </div>
+                        </tal:repeat_transition>
+                        <br />
+            </fieldset>
+
+            <!-- LISTING -->
+            <table class="listing" summary="Content listing">
+                <thead>
+                    <tr>
+                        <th class="nosort"><input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" /></th>
+                        <th class="nosort" i18n:translate="label_title">Title</th>
+                        <th class="nosort" i18n:translate="label_type">Type</th>
+                        <th class="nosort" i18n:translate="label_status">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tal:block tal:repeat="node view/infos">
+                        <tr tal:define="
+                                        item                node/brain;
+                                        level               node/level;
+                                        item_title          node/title;
+                                        item_url            item/getURL|item/absolute_url;
+                                        item_type           node/type;
+                                        item_type_class     python: 'contenttype-' + item_type;
+                                        item_icon           node/icon;
+                                        item_wf_state       node/review_state;
+                                        item_wf_state_class python:'state-' + item_wf_state;"
+
+                                tal:attributes="class string:even ${item_wf_state_class}-colorized" >
+                            <td>
+                                <input type="checkbox"
+                                        name="uids:list"
+                                        class="statusmap-uids"
+                                        tal:attributes="value item/UID;
+                                                        id string:item-${item/UID};
+                                                        "
+                                        disabled="disabled" />
+                           </td>
+                            <td style=""
+                                tal:attributes="style python:'padding-left: ' + str(5+(16*level)) + 'px';">
+                                <span class=""
+                                        tal:attributes="class item_type_class"
+                                        tal:condition="python:item_type != 'Link'">
+                                    <img width="16" height="16"
+                                            src="" alt=""
+                                            tal:condition="item_icon"
+                                            tal:attributes="src item_icon;"/>
+                                    <a href="#"
+                                            tal:attributes="href item_url;
+                                                            class string:${item_wf_state_class};"
+                                            tal:content="item_title">
+                                        Item Title
+                                    </a>
+                                </span>
+                            </td>
+                            <td tal:content="item/portal_type" i18n:translate="" i18n:domain="plone" style="white-space:nowrap;"></td>
+                            <td tal:content="item_wf_state"
+                                        i18n:translate=""
+                                        i18n:domain="plone"
+                                        tal:attributes="class item_wf_state_class"></td>
+                        </tr>
+                    </tal:block>
+                </tbody>
+            </table>
+
+            <!-- COMMENT -->
+            <div><label for="comment" i18n:translate="label_comment">Comment</label></div>
+            <textarea name="comment" id="comment"></textarea>
+            <div>
+                <input type="hidden" name="form.submitted" value="1" />
+                <input type="submit" name="submit" i18n:attributes="value label_change" value="Change" class="submit context" />
+            </div>
+
+        </form>
+
+    </div>
+
+</metal:main>
+</body>
+</html>
