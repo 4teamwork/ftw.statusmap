@@ -6,8 +6,10 @@ maintainer = "Timon Tschanz"
 
 tests_require = [
     'unittest2',
-    'ftw.testing',
     'plone.app.testing',
+    'plone.testing',
+    'transaction',
+    'zope.configuration',
     ]
 
 
@@ -17,15 +19,16 @@ extras_require = {
 
 
 long_description = (
-    open('README.txt').read()
+    open('README.rst').read()
     + '\n' +
     open('docs/HISTORY.txt').read()
     + '\n')
 
 setup(name='ftw.statusmap',
       version=version,
-      description="A review state site map for plone.",
+      description="A plone view listing objects and review states in a tree.",
       long_description=long_description,
+
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
@@ -36,18 +39,26 @@ setup(name='ftw.statusmap',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
+
       keywords='',
       author='4teamwork GmbH',
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
       url='https://github.com/4teamwork/ftw.statusmap',
-      license='gpl2',
+      license='GPL2',
+
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['ftw'],
       include_package_data=True,
       zip_safe=False,
+
       install_requires=[
           'setuptools',
+          'Products.CMFCore',
+          'Products.statusmessages',
+          'Zope2',
+          'zope.i18nmessageid',
+          'zope.publisher',
           # -*- Extra requirements: -*-
       ],
 
