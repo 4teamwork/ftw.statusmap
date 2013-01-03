@@ -10,8 +10,6 @@
     <!-- Include the sub-packages that use their own configure.zcml files. -->
     <include package=".browser" />
 
-    <!-- Register skins directory -->
-    <five:registerPackage package="." initialize=".initialize" />
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
       name="default"
