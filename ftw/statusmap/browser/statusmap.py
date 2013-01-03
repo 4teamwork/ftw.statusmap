@@ -12,6 +12,12 @@ class StatusMap(BrowserView):
 
     template = ViewPageTemplateFile("statusmap.pt")
 
+    def __init__(self, context, request):
+        self.cat = None
+        self.wf_tool = None
+        self.infos = None
+        super(StatusMap, self).__init__(context, request)
+
     def __call__(self):
         self.cat = getToolByName(self.context, 'portal_catalog')
         self.wf_tool = getToolByName(self.context, 'portal_workflow')
@@ -23,7 +29,7 @@ class StatusMap(BrowserView):
     def change_states(self):
         transition = self.request.get('transition', '')
         comment = self.request.get('comment', '')
-        uids = list(self.request.get('uids', []))
+        uids = self.request.get('uids', [])
         error = False
 
         if not transition:
@@ -38,6 +44,8 @@ class StatusMap(BrowserView):
             return
         executeTransition(
             self.context, self.wf_tool, transition, uids, comment)
+        msg = _(u'msg_no_uids', default=u"Transition executed successfully.")
+        IStatusMessage(self.request).addStatusMessage(msg, type='Information')
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/statusmap')
 
