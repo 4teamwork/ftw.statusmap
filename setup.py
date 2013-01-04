@@ -18,16 +18,12 @@ extras_require = {
     }
 
 
-long_description = (
-    open('README.rst').read()
-    + '\n' +
-    open('docs/HISTORY.txt').read()
-    + '\n')
-
 setup(name='ftw.statusmap',
       version=version,
       description="A plone view listing objects and review states in a tree.",
-      long_description=long_description,
+
+      long_description=open('README.rst').read() + '\n' + \
+          open(os.path.join('docs', 'HISTORY.txt')).read(),
 
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
