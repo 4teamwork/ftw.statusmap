@@ -40,7 +40,7 @@ setup(name='ftw.statusmap',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
 
-      keywords='',
+      keywords='ftw statusmap plone workflow tree',
       author='4teamwork GmbH',
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
