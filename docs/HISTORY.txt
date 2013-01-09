@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
+1.0 (2013-01-09)
+----------------
 
 - Implementation of basic features.
