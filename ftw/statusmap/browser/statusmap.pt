@@ -37,7 +37,7 @@
 
             <!-- ACTION -->
             <fieldset class="workflowmap_action">
-                <legend i18n:translate="label_transaction">Transaction</legend>
+                <legend i18n:translate="label_transition">Transition</legend>
                         <tal:repeat_transition
                                 repeat="transition view/list_transitions">
                             <div tal:define="name python:transition[0];
