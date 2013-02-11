@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-01-09 14:24+0000\n"
-"PO-Revision-Date: 2013-01-09 14:29+0100\n"
+"POT-Creation-Date: 2013-02-11 14:16+0000\n"
+"PO-Revision-Date: 2013-02-11 15:19+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,13 +16,18 @@ msgstr ""
 msgid "Statusmap"
 msgstr "Statusübersicht"
 
+#. Default: "Abort"
+#: ./ftw/statusmap/browser/statusmap.pt:126
+msgid "label_abort"
+msgstr "Abbrechen"
+
 #. Default: "Change"
-#: ./ftw/statusmap/browser/statusmap.pt:124
+#: ./ftw/statusmap/browser/statusmap.pt:123
 msgid "label_change"
 msgstr "Ändern"
 
 #. Default: "Comment"
-#: ./ftw/statusmap/browser/statusmap.pt:120
+#: ./ftw/statusmap/browser/statusmap.pt:121
 msgid "label_comment"
 msgstr "Kommentar"
 
@@ -52,16 +57,16 @@ msgid "label_workflow_map"
 msgstr "Statusübersicht"
 
 #. Default: "Please select a Transition"
-#: ./ftw/statusmap/browser/statusmap.py:36
+#: ./ftw/statusmap/browser/statusmap.py:38
 msgid "msg_no_transtion"
 msgstr "Bitte wählen Sie eine Statusänderung aus."
 
 #. Default: "Please select at least one Item"
-#: ./ftw/statusmap/browser/statusmap.py:40
+#: ./ftw/statusmap/browser/statusmap.py:42
 msgid "msg_no_uids"
 msgstr "Bitte wählen Sie ein oder mehrere Objekte aus."
 
 #. Default: "Transition executed successfully."
-#: ./ftw/statusmap/browser/statusmap.py:47
+#: ./ftw/statusmap/browser/statusmap.py:49
 msgid "msg_transition_successful"
 msgstr "Statusänderung wurde erfolgreich ausgeführt."

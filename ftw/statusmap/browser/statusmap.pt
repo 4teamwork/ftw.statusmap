@@ -33,13 +33,13 @@
         <p class="descreet"></p>
 
 
-        <form action="" method="POST">
+        <form action="" method="POST" tal:define="transitions view/list_transitions">
 
             <!-- ACTION -->
-            <fieldset class="workflowmap_action">
+            <fieldset class="workflowmap_action" tal:condition="python: bool(transitions)">
                 <legend i18n:translate="label_transition">Transition</legend>
                         <tal:repeat_transition
-                                repeat="transition view/list_transitions">
+                                repeat="transition transitions">
                             <div tal:define="name python:transition[0];
                                              title python:transition[1]"
                                     tal:attributes="class string:transition-${name}-colorized;">
@@ -117,13 +117,13 @@
             </table>
 
             <!-- COMMENT -->
+            <tal:comment tal:condition="python: bool(transitions)">
             <div><label for="comment" i18n:translate="label_comment">Comment</label></div>
-            <textarea name="comment" id="comment"></textarea>
-            <div>
-                <input type="hidden" name="form.submitted" value="1" />
+              <textarea name="comment" id="comment"></textarea>
                 <input type="submit" name="submit" i18n:attributes="value label_change" value="Change" class="submit context" />
-            </div>
-
+            </tal:comment>
+            <input type="hidden" name="form.submitted" value="1" />
+            <input type="submit" name="abort" i18n:attributes="value label_abort" value="Abort" class="standalone" />
         </form>
 
     </div>

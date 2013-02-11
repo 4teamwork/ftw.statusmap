@@ -23,6 +23,8 @@ class StatusMap(BrowserView):
         self.wf_tool = getToolByName(self.context, 'portal_workflow')
         self.infos = getInfos(self.context, self.cat, self.wf_tool)
         if self.request.get('form.submitted'):
+            if self.request.get('abort'):
+                return self.request.RESPONSE.redirect(self.context.absolute_url())
             self.change_states()
         return self.template()
 
