@@ -59,3 +59,4 @@ class TestStatusmapViewFunctional(TestCase):
         browser.addHeader('Authorization', 'Basic %s:%s' % ('user2', 'user2',))
         browser.open(self.portal.absolute_url()+'/statusmap')
         self.assertNotIn('name="submit"', browser.contents)
+        self.assertNotIn('<input type="checkbox" name="uids:list" class="statusmap-uids"', browser.contents)

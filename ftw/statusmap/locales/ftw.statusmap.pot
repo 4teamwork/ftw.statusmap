@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-02-11 14:16+0000\n"
+"POT-Creation-Date: 2013-02-13 15:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,13 @@ msgid "Statusmap"
 msgstr ""
 
 #. Default: "Abort"
-#: ./ftw/statusmap/browser/statusmap.pt:126
+#: ./ftw/statusmap/browser/statusmap.pt:124
 msgid "label_abort"
+msgstr ""
+
+#. Default: "Back"
+#: ./ftw/statusmap/browser/statusmap.pt:128
+msgid "label_back"
 msgstr ""
 
 #. Default: "Change"
