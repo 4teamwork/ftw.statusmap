@@ -23,6 +23,9 @@ class StatusMap(BrowserView):
         self.wf_tool = getToolByName(self.context, 'portal_workflow')
         self.infos = getInfos(self.context, self.cat, self.wf_tool)
         if self.request.get('form.submitted'):
+            if self.request.get('abort') or self.request.get('back'):
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
             self.change_states()
         return self.template()
 
@@ -44,7 +47,8 @@ class StatusMap(BrowserView):
             return
         executeTransition(
             self.context, self.wf_tool, transition, uids, comment)
-        msg = _(u'msg_transition_successful', default=u"Transition executed successfully.")
+        msg = _(u'msg_transition_successful',
+                default=u"Transition executed successfully.")
         IStatusMessage(self.request).addStatusMessage(msg, type='Information')
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/statusmap')

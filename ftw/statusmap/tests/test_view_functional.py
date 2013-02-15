@@ -3,7 +3,7 @@ from unittest2 import TestCase
 from Products.CMFCore.utils import getToolByName
 from plone.testing.z2 import Browser
 import transaction
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD, setRoles
 
 class TestStatusmapViewFunctional(TestCase):
 
@@ -16,6 +16,11 @@ class TestStatusmapViewFunctional(TestCase):
         self.wf_tool.setDefaultChain('simple_publication_workflow')
         self.cat = getToolByName(self.portal, 'portal_catalog')
 
+        regtool = getToolByName(self.portal, 'portal_registration')
+        regtool.addMember('user2', 'user2',
+                          properties={'username': 'user2',
+                                      'fullname': 'f\xc3\xbcllname2',
+                                      'email': 'user2@email.com'})
         doc1 = self.portal.get(self.portal.invokeFactory('Folder', 'folder1'))
         self.portal.invokeFactory('Document', 'document2')
         self.doc2 = doc1.get(doc1.invokeFactory('Document', 'document3'))
@@ -45,3 +50,20 @@ class TestStatusmapViewFunctional(TestCase):
         data = "form.submitted=1&uids:list=%s&transition=publish" % self.doc2.UID()
         browser.post('statusmap', data=data)
         self.assertIn('Transition executed successfully.', browser.contents)
+
+        browser.open(self.portal.absolute_url()+'/statusmap')
+        browser.getControl(name='abort').click()
+        self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
+
+
+    def test_view_reader(self):
+        setRoles(self.portal, 'user2', ['Reader'])
+        transaction.commit()
+        browser = Browser(self.layer['app'])
+        browser.handleErrors = False
+        browser.addHeader('Authorization', 'Basic %s:%s' % ('user2', 'user2',))
+        browser.open(self.portal.absolute_url()+'/statusmap')
+        self.assertNotIn('name="submit"', browser.contents)
+        self.assertNotIn('<input type="checkbox" name="uids:list" class="statusmap-uids"', browser.contents)
+        browser.getControl(name="back").click()
+        self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())

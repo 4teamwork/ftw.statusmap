@@ -33,13 +33,14 @@
         <p class="descreet"></p>
 
 
-        <form action="" method="POST">
+        <form action="" method="POST" tal:define="transitions view/list_transitions;
+                                                  has_transitions python: bool(transitions)">
 
             <!-- ACTION -->
-            <fieldset class="workflowmap_action">
+            <fieldset class="workflowmap_action" tal:condition="has_transitions">
                 <legend i18n:translate="label_transition">Transition</legend>
                         <tal:repeat_transition
-                                repeat="transition view/list_transitions">
+                                repeat="transition transitions">
                             <div tal:define="name python:transition[0];
                                              title python:transition[1]"
                                     tal:attributes="class string:transition-${name}-colorized;">
@@ -60,7 +61,9 @@
             <table class="listing" summary="Content listing">
                 <thead>
                     <tr>
-                        <th class="nosort"><input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" /></th>
+                        <th class="nosort" tal:condition="has_transitions">
+                          <input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" />
+                        </th>
                         <th class="nosort" i18n:translate="label_title">Title</th>
                         <th class="nosort" i18n:translate="label_type">Type</th>
                         <th class="nosort" i18n:translate="label_status">Status</th>
@@ -80,7 +83,7 @@
                                         item_wf_state_class python:'state-' + item_wf_state;"
 
                                 tal:attributes="class string:even ${item_wf_state_class}-colorized" >
-                            <td>
+                            <td tal:condition="has_transitions">
                                 <input type="checkbox"
                                         name="uids:list"
                                         class="statusmap-uids"
@@ -117,14 +120,18 @@
             </table>
 
             <!-- COMMENT -->
+            <tal:comment tal:condition="python: has_transitions">
             <div><label for="comment" i18n:translate="label_comment">Comment</label></div>
-            <textarea name="comment" id="comment"></textarea>
-            <div>
-                <input type="hidden" name="form.submitted" value="1" />
+              <textarea name="comment" id="comment"></textarea>
                 <input type="submit" name="submit" i18n:attributes="value label_change" value="Change" class="submit context" />
-            </div>
+                <input type="submit" name="abort" i18n:attributes="value label_abort" value="Abort" class="standalone" />
+            </tal:comment>
+            <input type="hidden" name="form.submitted" value="1" />
+            <tal:notransition tal:condition="python: not has_transitions">
+              <input type="submit" name="back" i18n:attributes="value label_back" value="Back" class="standalone" />
 
-        </form>
+            </tal:notransition>
+          </form>
 
     </div>
 
