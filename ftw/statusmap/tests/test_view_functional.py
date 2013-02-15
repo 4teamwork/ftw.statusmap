@@ -51,6 +51,11 @@ class TestStatusmapViewFunctional(TestCase):
         browser.post('statusmap', data=data)
         self.assertIn('Transition executed successfully.', browser.contents)
 
+        browser.open(self.portal.absolute_url()+'/statusmap')
+        browser.getControl(name='abort').click()
+        self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
+
+
     def test_view_reader(self):
         setRoles(self.portal, 'user2', ['Reader'])
         transaction.commit()
@@ -60,3 +65,5 @@ class TestStatusmapViewFunctional(TestCase):
         browser.open(self.portal.absolute_url()+'/statusmap')
         self.assertNotIn('name="submit"', browser.contents)
         self.assertNotIn('<input type="checkbox" name="uids:list" class="statusmap-uids"', browser.contents)
+        browser.getControl(name="back").click()
+        self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
