@@ -1,3 +1,6 @@
+from plone.app.uuid.utils import uuidToObject
+
+
 def getTransitionsForItem(wf_tool, brains, dicts):
     for index, brain in enumerate(brains):
         obj = brain.getObject()
@@ -30,7 +33,7 @@ def getBaseInfo(base_path, brains):
 
 def executeTransition(context, wf_tool, transition, uids, comment):
     for uid in uids:
-        obj = context.reference_catalog.lookupObject(uid)
+        obj = uuidToObject(uid)
         wf_tool.doActionFor(obj, transition, comment=comment)
 
 
