@@ -1,9 +1,12 @@
 from ftw.statusmap.testing import FTW_STATUSMAP_FUNCTIONAL_TESTING
-from unittest2 import TestCase
-from Products.CMFCore.utils import getToolByName
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
 from plone.testing.z2 import Browser
+from Products.CMFCore.utils import getToolByName
+from unittest2 import TestCase
 import transaction
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD, setRoles
+
 
 class TestStatusmapViewFunctional(TestCase):
 
@@ -29,15 +32,21 @@ class TestStatusmapViewFunctional(TestCase):
     def test_view_browser(self):
         browser = Browser(self.layer['app'])
         browser.handleErrors = False
-        browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
-        browser.open(self.portal.absolute_url()+'/statusmap')
-        self.assertIn('<a href="http://nohost/plone/folder1/document3"', browser.contents)
-        self.assertIn('<a href="http://nohost/plone/document2"', browser.contents)
-        self.assertIn('<a href="http://nohost/plone/folder1"', browser.contents)
+        browser.addHeader('Authorization', 'Basic %s:%s' % (
+            TEST_USER_NAME, TEST_USER_PASSWORD,))
+        browser.open(self.portal.absolute_url() + '/statusmap')
+        self.assertIn('<a href="http://nohost/plone/folder1/document3"',
+            browser.contents)
+        self.assertIn('<a href="http://nohost/plone/document2"',
+            browser.contents)
+        self.assertIn('<a href="http://nohost/plone/folder1"',
+            browser.contents)
         self.assertIn('<label for="publish">Publish</label>', browser.contents)
-        self.assertIn('<label for="submit">Submit for publication</label>', browser.contents)
+        self.assertIn('<label for="submit">Submit for publication</label>',
+            browser.contents)
 
-        browser.post('statusmap', data="form.submitted=1&uids:list=445i85-556986-55969")
+        browser.post(
+            'statusmap', data="form.submitted=1&uids:list=445i85-556986-55969")
         self.assertIn('Please select a Transition', browser.contents)
 
         browser.post('statusmap', data="form.submitted=1&transition=publish")
@@ -47,14 +56,14 @@ class TestStatusmapViewFunctional(TestCase):
         self.assertIn('Please select at least one Item', browser.contents)
         self.assertIn('Please select a Transition', browser.contents)
 
-        data = "form.submitted=1&uids:list=%s&transition=publish" % self.doc2.UID()
+        data = "form.submitted=1&uids:list=%s&transition=publish" % (
+            self.doc2.UID())
         browser.post('statusmap', data=data)
         self.assertIn('Transition executed successfully.', browser.contents)
 
-        browser.open(self.portal.absolute_url()+'/statusmap')
+        browser.open(self.portal.absolute_url() + '/statusmap')
         browser.getControl(name='abort').click()
         self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
-
 
     def test_view_reader(self):
         setRoles(self.portal, 'user2', ['Reader'])
@@ -62,8 +71,10 @@ class TestStatusmapViewFunctional(TestCase):
         browser = Browser(self.layer['app'])
         browser.handleErrors = False
         browser.addHeader('Authorization', 'Basic %s:%s' % ('user2', 'user2',))
-        browser.open(self.portal.absolute_url()+'/statusmap')
+        browser.open(self.portal.absolute_url() + '/statusmap')
         self.assertNotIn('name="submit"', browser.contents)
-        self.assertNotIn('<input type="checkbox" name="uids:list" class="statusmap-uids"', browser.contents)
+        self.assertNotIn(
+            '<input type="checkbox" name="uids:list" class="statusmap-uids"',
+            browser.contents)
         browser.getControl(name="back").click()
         self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
