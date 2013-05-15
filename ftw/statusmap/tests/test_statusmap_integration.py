@@ -18,24 +18,40 @@ class TestStatusmap(TestCase):
         self.portal.invokeFactory('Document', 'document2')
         doc1.invokeFactory('Document', 'document3')
 
-    def test_getInfos(self):
+    def test_getInfos_amount_of_items(self):
         result = getInfos(self.portal, self.cat, self.wf_tool)
         self.assertEqual(len(result), 3)
+
+    def test_getInfos_transitions_and_review_state(self):
+        result = getInfos(self.portal, self.cat, self.wf_tool)
+
         for item in result:
             self.assertEqual(item['transitions'],
                              [['publish', 'Publish'],
                               ['submit', 'Submit for publication']])
             self.assertEqual(item['review_state'], 'private')
-        self.assertEqual(result[0]['level'], 1)
-        self.assertEqual(result[1]['level'], 1)
-        self.assertEqual(result[2]['level'], 2)
+
+    def test_getInfos_order(self):
+        result = getInfos(self.portal, self.cat, self.wf_tool)
+
+        self.assertEqual(result[0]['path'], '/plone/folder1')
+        self.assertEqual(result[1]['path'], '/plone/folder1/document3')
+        self.assertEqual(result[2]['path'], '/plone/document2')
+
+    def test_getInfos_level(self):
+        result = getInfos(self.portal, self.cat, self.wf_tool)
+        self.assertEqual(result[0]['level'], '1')
+        self.assertEqual(result[1]['level'], '2')
+        self.assertEqual(result[2]['level'], '1')
 
     def test_executeTransition(self):
         brains = self.cat.searchResults({})
+
         executeTransition(self.portal,
                           self.wf_tool,
                           'publish',
                           [brains[2].UID],
                           comment="Bla Bla Bla Mr. Freeman")
+
         brains = self.cat.searchResults({})
         self.assertEqual(brains[2].review_state, 'published')
