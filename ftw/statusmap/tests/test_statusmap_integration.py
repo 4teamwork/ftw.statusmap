@@ -34,15 +34,15 @@ class TestStatusmap(TestCase):
     def test_getInfos_order(self):
         result = getInfos(self.portal, self.cat, self.wf_tool)
 
-        self.assertEqual(result[0]['path'], '/plone/folder1')
-        self.assertEqual(result[1]['path'], '/plone/folder1/document3')
-        self.assertEqual(result[2]['path'], '/plone/document2')
+        self.assertEqual(result[0]['path'], '/plone/document2')
+        self.assertEqual(result[1]['path'], '/plone/folder1')
+        self.assertEqual(result[2]['path'], '/plone/folder1/document3')
 
     def test_getInfos_level(self):
         result = getInfos(self.portal, self.cat, self.wf_tool)
-        self.assertEqual(result[0]['level'], '1')
-        self.assertEqual(result[1]['level'], '2')
-        self.assertEqual(result[2]['level'], '1')
+        self.assertEqual(result[0]['level'], 1)
+        self.assertEqual(result[1]['level'], 1)
+        self.assertEqual(result[2]['level'], 2)
 
     def test_executeTransition(self):
         brains = self.cat.searchResults({})

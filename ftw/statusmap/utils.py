@@ -39,7 +39,7 @@ def executeTransition(context, wf_tool, transition, uids, comment):
 
 def getInfos(context, cat, wf_tool):
     path = '/'.join(context.getPhysicalPath())
-    brains = cat.searchResults({'path': path})
+    brains = cat.searchResults({'path': path, 'sort_on': 'path'})
     items = getBaseInfo(path, brains)
     items = getTransitionsForItem(wf_tool, brains, items)
     return items
