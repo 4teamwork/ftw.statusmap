@@ -21,17 +21,23 @@ class TestStatusmapView(TestCase):
 
     def test_view(self):
         view = self.portal.restrictedTraverse('statusmap')
-        view.request['ACTUAL_URL'] = self.portal.absolute_url()+ '/statusmap'
+        view.request['ACTUAL_URL'] = self.portal.absolute_url() + '/statusmap'
         view()
         possible_trans = json.loads(view.get_json())
-        self.assertEqual(len(possible_trans),3)
+        self.assertEqual(len(possible_trans), 3)
         self.assertIn(view.infos[0]['uid'], possible_trans.keys())
         self.assertIn(view.infos[1]['uid'], possible_trans.keys())
         self.assertIn(view.infos[2]['uid'], possible_trans.keys())
 
-        self.assertEqual(possible_trans[view.infos[0]['uid']], ['publish', 'submit'])
-        self.assertEqual(possible_trans[view.infos[1]['uid']], ['publish', 'submit'])
-        self.assertEqual(possible_trans[view.infos[2]['uid']], ['publish', 'submit'])
+        self.assertEqual(
+            possible_trans[view.infos[0]['uid']], ['publish', 'submit'])
+        self.assertEqual(
+            possible_trans[view.infos[1]['uid']], ['publish', 'submit'])
+        self.assertEqual(
+            possible_trans[view.infos[2]['uid']], ['publish', 'submit'])
 
         all_trans = view.list_transitions()
-        self.assertEqual(all_trans, [['publish', 'Publish'], ['submit', 'Submit for publication']])
+        self.assertEqual(
+            all_trans,
+            [['publish', 'Publish'],
+            ['submit', 'Submit for publication']])
