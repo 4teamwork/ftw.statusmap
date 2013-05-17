@@ -41,3 +41,15 @@ class TestStatusmapView(TestCase):
             all_trans,
             [['publish', 'Publish'],
             ['submit', 'Submit for publication']])
+
+    def test_get_translated_type(self):
+        view = self.portal.restrictedTraverse('statusmap')
+        msg = view.get_translated_type('Document')
+
+        self.assertEquals(msg, u'Document')
+
+    def test_get_translated_type_fallback(self):
+        view = self.portal.restrictedTraverse('statusmap')
+        msg = view.get_translated_type('DUMMY')
+
+        self.assertEquals(msg, u'DUMMY')
