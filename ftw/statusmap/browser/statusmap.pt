@@ -109,7 +109,7 @@
                                     </a>
                                 </span>
                             </td>
-                            <td tal:content="item/portal_type" i18n:translate="" i18n:domain="plone" style="white-space:nowrap;"></td>
+                            <td tal:content="python: view.get_translated_type(item_type)" style="white-space:nowrap;"></td>
                             <td tal:content="item_wf_state"
                                         i18n:translate=""
                                         i18n:domain="plone"

@@ -1,11 +1,12 @@
-from zope.publisher.browser import BrowserView
-from ftw.statusmap.utils import getInfos
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from ftw.statusmap import _
 from ftw.statusmap.utils import executeTransition
-import json
+from ftw.statusmap.utils import getInfos
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
+from zope.i18n import translate
+from zope.publisher.browser import BrowserView
+import json
 
 
 class StatusMap(BrowserView):
@@ -70,3 +71,14 @@ class StatusMap(BrowserView):
 
     def get_allowed_transitions(self):
         return "var possible_transitions = %s;" % self.get_json()
+
+    def get_translated_type(self, portal_type):
+        portal_types = getToolByName(self.context, 'portal_types')
+        fti = portal_types.get(portal_type, None)
+        if fti is None:
+            domain = 'plone'
+        else:
+            domain = fti.i18n_domain
+
+        return translate(msgid=portal_type, domain=domain,
+                         context=self.request)

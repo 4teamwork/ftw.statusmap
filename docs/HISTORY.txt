@@ -4,6 +4,9 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Translate portal type names with its own i18n domain.
+  [mathias.leimgruber]
+
 - Fix item order - sort on path.
   [mathias.leimgruber]
 
