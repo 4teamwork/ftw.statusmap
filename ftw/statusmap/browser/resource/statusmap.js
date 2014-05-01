@@ -3,7 +3,7 @@ var statusmap = new Object();
 statusmap.toggleCheckboxes = function(el){
     var status;
     el.checked ? status = 1 : status = 0;
-    var boxes = cssQuery(".statusmap-uids");
+    var boxes = jQuery(".statusmap-uids");
     for(var i=0; i<boxes.length; i++) {
         if(boxes[i].disabled) {
             continue;
@@ -16,15 +16,15 @@ statusmap.toggleCheckboxes = function(el){
             boxes[i].removeAttribute('checked');
         }
     }
-}
+};
 
 statusmap.selectTransition = function(el) {
-    var select_all = cssQuery('#select_all')[0];
+    var select_all = jQuery('#select_all')[0];
     select_all.disabled = false;
     select_all.removeAttribute('disabled');
     var transition = el.getAttribute('value');
     //
-    var boxes = cssQuery('.statusmap-uids');
+    var boxes = jQuery('.statusmap-uids');
     for(var i=0; i<boxes.length; i++) {
         var node = boxes[i];
         var id = node.id.substr('item-'.length);
@@ -42,4 +42,4 @@ statusmap.selectTransition = function(el) {
             node.removeAttribute('checked');
         }
     }
-}
+};
