@@ -38,7 +38,7 @@ setup(name='ftw.statusmap',
         ],
 
       keywords='ftw statusmap plone workflow tree',
-      author='4teamwork GmbH',
+      author='4teamwork AG',
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
       url='https://github.com/4teamwork/ftw.statusmap',
