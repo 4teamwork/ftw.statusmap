@@ -27,9 +27,9 @@ Usage
 Links
 -----
 
-- Main github project repository: https://github.com/4teamwork/ftw.statusmap
-- Issue tracker: https://github.com/4teamwork/ftw.statusmap/issues
-- Package on pypi: http://pypi.python.org/pypi/ftw.statusmap
+- Github: https://github.com/4teamwork/ftw.statusmap
+- Issues: https://github.com/4teamwork/ftw.statusmap/issues
+- Pypi: http://pypi.python.org/pypi/ftw.statusmap
 - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.statusmap
 
 
