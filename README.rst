@@ -39,7 +39,3 @@ Copyright
 This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
 
 ``ftw.statusmap`` is licensed under GNU General Public License, version 2.
-
-.. image:: https://cruel-carlota.pagodabox.com/b5c0827c8b10eb2881831bd0ca772397
-   :alt: githalytics.com
-   :target: http://githalytics.com/4teamwork/ftw.statusmap
