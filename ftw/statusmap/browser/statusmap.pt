@@ -26,7 +26,8 @@
 <body>
 <metal:main fill-slot="main">
 
-    <div metal:define-macro="main">
+    <div metal:define-macro="main"
+         tal:define="normalizeString nocall:context/@@plone/normalizeString">
 
         <h1 class="documentFirstHeading"
             i18n:translate="label_workflow_map">Workflow Map</h1>
@@ -76,7 +77,7 @@
                                         level               node/level;
                                         item_title          node/title;
                                         item_url            item/getURL|item/absolute_url;
-                                        item_type           node/type;
+                                        item_type           python: normalizeString(node['type']);
                                         item_type_class     python: 'contenttype-' + item_type;
                                         item_icon           node/icon;
                                         item_wf_state       node/review_state;
