@@ -46,7 +46,7 @@ class TestStatusmapView(TestCase):
         view = self.portal.restrictedTraverse('statusmap')
         msg = view.get_translated_type('Document')
 
-        self.assertEquals(msg, u'Document')
+        self.assertEquals(msg, u'Page')
 
     def test_get_translated_type_fallback(self):
         view = self.portal.restrictedTraverse('statusmap')
