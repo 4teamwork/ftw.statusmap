@@ -75,10 +75,13 @@ class StatusMap(BrowserView):
     def get_translated_type(self, portal_type):
         portal_types = getToolByName(self.context, 'portal_types')
         fti = portal_types.get(portal_type, None)
-        if fti is None or not fti.i18n_domain:
-            domain = 'plone'
-        else:
-            domain = fti.i18n_domain
+        if fti is None:
+            return translate(msgid=portal_type, domain='plone',
+                             context=self.request)
 
-        return translate(msgid=portal_type, domain=domain,
+        if not fti.i18n_domain:
+            return translate(msgid=fti.title, domain='plone',
+                             context=self.request)
+
+        return translate(msgid=fti.title, domain=fti.i18n_domain,
                          context=self.request)

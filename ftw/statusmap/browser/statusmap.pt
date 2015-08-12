@@ -77,8 +77,8 @@
                                         level               node/level;
                                         item_title          node/title;
                                         item_url            item/getURL|item/absolute_url;
-                                        item_type           python: normalizeString(node['type']);
-                                        item_type_class     python: 'contenttype-' + item_type;
+                                        item_type           python: node['type'];
+                                        item_type_class     python: 'contenttype-' + normalizeString(item_type);
                                         item_icon           node/icon;
                                         item_wf_state       node/review_state;
                                         item_wf_state_class python:'state-' + item_wf_state;"
@@ -110,7 +110,7 @@
                                     </a>
                                 </span>
                             </td>
-                            <td tal:content="python: view.get_translated_type(item_type)" style="white-space:nowrap;"></td>
+                            <td tal:content="python: view.get_translated_type(node['type'])" style="white-space:nowrap;"></td>
                             <td tal:content="item_wf_state"
                                         i18n:translate=""
                                         i18n:domain="plone"
