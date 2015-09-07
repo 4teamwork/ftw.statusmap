@@ -4,6 +4,9 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
+- Fix status message type.
+  [mbaechtold]
+
 - Fix portal type title when deviates from FTI id.
   [jone]
 

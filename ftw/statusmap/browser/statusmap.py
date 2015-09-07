@@ -50,7 +50,7 @@ class StatusMap(BrowserView):
             self.context, self.wf_tool, transition, uids, comment)
         msg = _(u'msg_transition_successful',
                 default=u"Transition executed successfully.")
-        IStatusMessage(self.request).addStatusMessage(msg, type='Information')
+        IStatusMessage(self.request).addStatusMessage(msg, type='info')
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/statusmap')
 
