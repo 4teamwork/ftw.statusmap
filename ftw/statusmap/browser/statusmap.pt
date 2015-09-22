@@ -42,8 +42,8 @@
                 <legend i18n:translate="label_transition">Transition</legend>
                         <tal:repeat_transition
                                 repeat="transition transitions">
-                            <div tal:define="name python:transition[0];
-                                             title python:transition[1]"
+                            <div tal:define="name python:transition.get('id');
+                                             title python:view.get_transition_title(transition)"
                                     tal:attributes="class string:transition-${name}-colorized;">
                                 <input type="radio"
                                         onclick="statusmap.selectTransition(this);"
@@ -51,8 +51,7 @@
                                                         id name;
                                                         name string:transition;
                                                         "/>
-                                <label for="" tal:attributes="for name" i18n:translate="" i18n:domain="plone"
-                                        tal:content="python:title" />
+                                <label class="transitionLabel" tal:attributes="for name" tal:content="python:title" />
                             </div>
                         </tal:repeat_transition>
                         <br />

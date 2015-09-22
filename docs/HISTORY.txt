@@ -4,6 +4,9 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
+- Add old and new state to the transitions-listing
+  [elioschmutz]
+
 - Fix status message type.
   [mbaechtold]
 

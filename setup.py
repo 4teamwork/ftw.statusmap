@@ -10,6 +10,10 @@ tests_require = [
     'plone.testing',
     'transaction',
     'zope.configuration',
+    'ftw.builder',
+    'ftw.testbrowser',
+    'ftw.testing',
+    'plone.api',
     ]
 
 
