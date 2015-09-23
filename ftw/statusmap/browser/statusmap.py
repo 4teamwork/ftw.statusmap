@@ -65,12 +65,24 @@ class StatusMap(BrowserView):
     def get_json(self):
         result = {}
         for item in self.infos:
-            result[item['uid']] = [transition[0]
+            result[item['uid']] = [transition.get('id')
                                    for transition in item['transitions']]
         return json.dumps(result)
 
     def get_allowed_transitions(self):
         return "var possible_transitions = %s;" % self.get_json()
+
+    def get_transition_title(self, transition):
+        def _translate(request, msgid):
+            return translate(
+                msgid=msgid,
+                domain="plone",
+                context=request).encode('utf-8')
+
+        return '{0} - {1} => {2}'.format(
+            _translate(self.request, transition.get('id')),
+            _translate(self.request, transition.get('old_review_state')),
+            _translate(self.request, transition.get('new_review_state')))
 
     def get_translated_type(self, portal_type):
         portal_types = getToolByName(self.context, 'portal_types')

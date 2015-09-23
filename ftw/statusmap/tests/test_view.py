@@ -37,10 +37,17 @@ class TestStatusmapView(TestCase):
             possible_trans[view.infos[2]['uid']], ['publish', 'submit'])
 
         all_trans = view.list_transitions()
+
         self.assertEqual(
             all_trans,
-            [['publish', 'Publish'],
-            ['submit', 'Submit for publication']])
+            [{'new_review_state': 'published',
+              'old_review_state': 'private',
+              'id': 'publish',
+              'title': 'Publish'},
+             {'new_review_state': 'pending',
+              'old_review_state': 'private',
+              'id': 'submit',
+              'title': 'Submit for publication'}])
 
     def test_get_translated_type(self):
         view = self.portal.restrictedTraverse('statusmap')

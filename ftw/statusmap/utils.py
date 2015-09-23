@@ -8,7 +8,12 @@ def getTransitionsForItem(wf_tool, brains, dicts):
         avail_actions = []
         for action in actions:
             if action['category'] == 'workflow':
-                avail_actions.append([action['id'], action['title']])
+                avail_actions.append({
+                    'id': action['id'],
+                    'title': action['title'],
+                    'old_review_state': brain.review_state,
+                    'new_review_state': action.get('transition').new_state_id,
+                    })
         dicts[index]['transitions'] = avail_actions
     return dicts
 

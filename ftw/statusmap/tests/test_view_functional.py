@@ -1,5 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.statusmap.testing import FTW_STATUSMAP_FUNCTIONAL_TESTING
+from ftw.testbrowser import browsing
+from plone import api
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.testing.z2 import Browser
@@ -41,8 +46,13 @@ class TestStatusmapViewFunctional(TestCase):
             browser.contents)
         self.assertIn('<a href="http://nohost/plone/folder1"',
             browser.contents)
-        self.assertIn('<label for="publish">Publish</label>', browser.contents)
-        self.assertIn('<label for="submit">Submit for publication</label>',
+        self.assertIn(
+            '<label class="transitionLabel" for="publish">'
+            'publish - private =&gt; published</label>',
+            browser.contents)
+        self.assertIn(
+            '<label class="transitionLabel" for="submit">'
+            'submit - private =&gt; pending</label>',
             browser.contents)
 
         browser.post(
@@ -78,3 +88,28 @@ class TestStatusmapViewFunctional(TestCase):
             browser.contents)
         browser.getControl(name="back").click()
         self.assertEqual(browser.url.strip('/'), self.portal.absolute_url())
+
+    @browsing
+    def test_transistions_with_translated_start_and_end_state(self, browser):
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('de')
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        transaction.commit()
+
+        folder = create(Builder('folder'))
+        browser.login().visit(folder, view="@@statusmap")
+
+        labels = browser.css('.transitionLabel')
+
+        self.assertEqual(
+            2, len(labels),
+            "The default workflow has two transitions from the private state. "
+            "So there should be two labels. One for each transition")
+
+        self.assertIn(
+            u'ver\xf6ffentlichen - privat => ver\xf6ffentlicht',
+            [label.text for label in labels])
+
+        self.assertIn(
+            u'einreichen - privat => wartend',
+            [label.text for label in labels])
