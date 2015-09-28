@@ -1,0 +1,44 @@
+<tal:master define="level options/level | python:0;
+                    nodes options/nodes;
+                    has_transitions options/has_transitions | nothing;
+                    normalizeString nocall:context/@@plone/normalizeString;"
+
+            i18n:domain="ftw.statusmap">
+
+  <tal:node repeat="node nodes">
+    <tal:aa define="children node/nodes;">
+      <tr tal:attributes="class string:even ${item_wf_state_class}-colorized" tal:define="
+        level               options/level | python:0;
+        item_title          node/title;
+        item_url            node/url;
+        item_type           node/type;
+        item_type_class     python: 'contenttype-' + normalizeString(item_type);
+        item_icon           node/icon;
+        item_wf_state       node/review_state;
+        item_wf_state_class python:'state-' + item_wf_state;">
+
+        <td tal:condition="has_transitions">
+          <input type="checkbox" name="uids:list" class="statusmap-uids" tal:attributes="value node/uid; id string:item-${node/uid};" disabled="disabled" />
+        </td>
+
+        <td style="" tal:attributes="style python:'padding-left: ' + str(5+(16*level)) + 'px';">
+          <span class="" tal:attributes="class item_type_class" tal:condition="python:item_type != 'Link'">
+            <img width="16" height="16" src="" alt="" tal:condition="item_icon" tal:attributes="src item_icon;"/>
+            <a href="#" tal:attributes="href item_url; class string:${item_wf_state_class};" tal:content="item_title">
+              Item Title
+            </a>
+          </span>
+        </td>
+
+        <td tal:content="python: view.get_translated_type(node['type'])" style="white-space:nowrap;"></td>
+
+        <td tal:content="item_wf_state" i18n:translate="" i18n:domain="plone" tal:attributes="class item_wf_state_class"></td>
+
+      </tr>
+      <tal:children condition="python: len(children) > 0">
+        <tr tal:replace="structure python:view.template_recursive(nodes=children, level=level+1, has_transitions=has_transitions)">Subtree</tr>
+      </tal:children>
+    </tal:aa>
+  </tal:node>
+
+</tal:master>
