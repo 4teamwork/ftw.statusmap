@@ -22,4 +22,8 @@
     <!-- Register translations-->
     <i18n:registerTranslations directory="locales"/>
 
+    <adapter
+      for="*"
+      factory="ftw.statusmap.utils.StatusMapFolderTree"
+      provides="ftw.statusmap.interfaces.IStatusMapFolderTree" />
 </configure>

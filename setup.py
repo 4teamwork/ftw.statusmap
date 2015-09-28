@@ -13,7 +13,6 @@ tests_require = [
     'ftw.builder',
     'ftw.testbrowser',
     'ftw.testing',
-    'plone.api',
     ]
 
 
@@ -60,6 +59,7 @@ setup(name='ftw.statusmap',
           'Zope2',
           'zope.i18nmessageid',
           'zope.publisher',
+          'plone.api',
           # -*- Extra requirements: -*-
       ],
 
