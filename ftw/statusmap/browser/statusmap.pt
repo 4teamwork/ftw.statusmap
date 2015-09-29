@@ -9,7 +9,7 @@
   <head>
     <metal:javascriptslot fill-slot="javascript_head_slot">
       <script type="text/javascript" src="++resource++ftw.statusmap/statusmap.js"></script>
-      <script type="text/javascript" tal:content="view/get_allowed_transitions"></script>
+      <script type="text/javascript" tal:content="view/possible_transitions"></script>
     </metal:javascriptslot>
 
     <metal:cssslot fill-slot="css_slot">
@@ -26,10 +26,10 @@
         <h1 class="documentFirstHeading" i18n:translate="label_workflow_map">Workflow Map</h1>
       </div>
 
-      <form action="" method="POST" tal:define="transitions view/list_transitions;">
+      <form action="" method="POST" tal:define="transitions view/transitions;">
 
           <!-- ACTION -->
-          <fieldset class="workflowmap_action" tal:condition="transitions">
+          <fieldset class="workflowmap_action" tal:condition="view/has_transitions">
               <legend i18n:translate="label_transition">Transition</legend>
                       <tal:repeat_transition
                               repeat="transition transitions">
@@ -52,7 +52,7 @@
             <table class="listing" summary="Content listing">
               <thead>
                 <tr>
-                  <th class="nosort" tal:condition="transitions">
+                  <th class="nosort" tal:condition="view/has_transitions">
                     <input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" />
                   </th>
                   <th class="nosort" i18n:translate="label_title">Title</th>

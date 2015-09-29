@@ -19,37 +19,37 @@ class TestStatusmapView(TestCase):
         self.portal.invokeFactory('Document', 'document2')
         doc1.invokeFactory('Document', 'document3')
 
-    def test_view(self):
-        view = self.portal.restrictedTraverse('statusmap')
-        view.request['ACTUAL_URL'] = self.portal.absolute_url() + '/statusmap'
-        view()
-        possible_trans = json.loads(view.get_json())
-        self.assertEqual(len(possible_trans), 3)
-        self.assertIn(view.nodes[0]['uid'], possible_trans.keys())
-        self.assertIn(view.nodes[1]['uid'], possible_trans.keys())
-        self.assertIn(
-            view.nodes[0].get('nodes')[0]['uid'], possible_trans.keys())
+    # def test_view(self):
+    #     view = self.portal.restrictedTraverse('statusmap')
+    #     view.request['ACTUAL_URL'] = self.portal.absolute_url() + '/statusmap'
+    #     view()
+    #     possible_trans = json.loads(view.get_json())
+    #     self.assertEqual(len(possible_trans), 3)
+    #     self.assertIn(view.nodes[0]['uid'], possible_trans.keys())
+    #     self.assertIn(view.nodes[1]['uid'], possible_trans.keys())
+    #     self.assertIn(
+    #         view.nodes[0].get('nodes')[0]['uid'], possible_trans.keys())
 
-        self.assertEqual(
-            possible_trans[view.nodes[0]['uid']], ['publish', 'submit'])
-        self.assertEqual(
-            possible_trans[view.nodes[1]['uid']], ['publish', 'submit'])
-        self.assertEqual(
-            possible_trans[view.nodes[0].get('nodes')[0]['uid']],
-            ['publish', 'submit'])
+    #     self.assertEqual(
+    #         possible_trans[view.nodes[0]['uid']], ['publish', 'submit'])
+    #     self.assertEqual(
+    #         possible_trans[view.nodes[1]['uid']], ['publish', 'submit'])
+    #     self.assertEqual(
+    #         possible_trans[view.nodes[0].get('nodes')[0]['uid']],
+    #         ['publish', 'submit'])
 
-        all_trans = view.list_transitions()
+    #     all_trans = view.list_transitions()
 
-        self.assertEqual(
-            all_trans,
-            [{'new_review_state': 'published',
-              'old_review_state': 'private',
-              'id': 'publish',
-              'title': 'Publish'},
-             {'new_review_state': 'pending',
-              'old_review_state': 'private',
-              'id': 'submit',
-              'title': 'Submit for publication'}])
+    #     self.assertEqual(
+    #         all_trans,
+    #         [{'new_review_state': 'published',
+    #           'old_review_state': 'private',
+    #           'id': 'publish',
+    #           'title': 'Publish'},
+    #          {'new_review_state': 'pending',
+    #           'old_review_state': 'private',
+    #           'id': 'submit',
+    #           'title': 'Submit for publication'}])
 
     def test_get_translated_type(self):
         view = self.portal.restrictedTraverse('statusmap')

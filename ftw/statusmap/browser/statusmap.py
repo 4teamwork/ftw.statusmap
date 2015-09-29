@@ -1,7 +1,6 @@
 from ftw.statusmap import _
 from ftw.statusmap.interfaces import IStatusMapFolderTree
 from ftw.statusmap.utils import executeTransition
-from functools import partial
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
@@ -21,73 +20,53 @@ class StatusMap(BrowserView):
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
             self.change_states()
+
+        self.update()
         return self.template()
 
-    @property
-    def nodes(self):
-        """Returns all nodes of the statusmap in a nested dict.
-        """
-        if not getattr(self, '_nodes', None):
-            setattr(self, '_nodes', IStatusMapFolderTree(self.context)())
-
-        return getattr(self, '_nodes')
+    def update(self):
+        self.tree = IStatusMapFolderTree(self.context)
+        self.nodes = self.tree()
+        self.transitions = self.tree.get_possible_transitions()
+        self.has_transitions = self.tree.has_transitions()
 
     def render_status_map(self):
         return self.template_recursive(
             nodes=self.nodes,
             level=0,
-            has_transitions=len(self.list_transitions()))
+            has_transitions=self.has_transitions)
 
     def change_states(self):
+        """Changes review_state of multiple selected nodes
+        """
         transition = self.request.get('transition', '')
         comment = self.request.get('comment', '')
         uids = self.request.get('uids', [])
-        error = False
 
         if not transition:
             msg = _(u'msg_no_transtion', default=u"Please select a Transition")
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            error = True
-        if len(uids) == 0:
+            return
+        import pdb; pdb.set_trace()
+        if not uids:
             msg = _(u'msg_no_uids', default=u"Please select at least one Item")
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            error = True
-        if error:
             return
+
         executeTransition(transition, uids, comment)
+
         msg = _(u'msg_transition_successful',
                 default=u"Transition executed successfully.")
         IStatusMessage(self.request).addStatusMessage(msg, type='info')
+
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/statusmap')
 
-    def list_transitions(self):
-        def _get_transitions_recursive(result, node):
-            for transition in node.get('transitions'):
-                if transition not in result:
-                    result.append(transition)
-
-            map(partial(_get_transitions_recursive, result), node.get('nodes'))
-
-        result = []
-        map(partial(_get_transitions_recursive, result), self.nodes)
-
-        return result
-
-    def get_json(self):
-        def _get_transitions_recursive(result, node):
-            result[node['uid']] = [t.get('id') for t in node['transitions']]
-            map(partial(_get_transitions_recursive, result), node.get('nodes'))
-
-            return result
-
-        result = {}
-        map(partial(_get_transitions_recursive, result), self.nodes)
-
-        return json.dumps(result)
-
-    def get_allowed_transitions(self):
-        return "var possible_transitions = %s;" % self.get_json()
+    def possible_transitions(self):
+        """ Loads all possible transitions for each object in javascript
+        """
+        return "var possible_transitions = %s;" % json.dumps(
+            self.tree.get_possible_transitions_for_uids())
 
     def get_transition_title(self, transition):
         def _translate(request, msgid):

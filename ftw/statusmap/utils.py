@@ -21,9 +21,62 @@ class StatusMapFolderTree(object):
         self.portal_properties = api.portal.get_tool('portal_properties')
 
     def __call__(self):
-        return self.generate_tree()
+        return self.get_tree()
 
-    def generate_tree(self):
+    def get_tree(self):
+        """Returns the generated tree
+        """
+        if not getattr(self, '_tree', None):
+            setattr(self, '_tree', self._generate_tree())
+
+        return getattr(self, '_tree')
+
+    def has_transitions(self):
+        """Checkt wheter there are possible transitions in the tree nodes
+        """
+        return bool(self.get_possible_transitions())
+
+    def get_possible_transitions(self):
+        """Returns all possible transitions of all nodes in the tree in a list
+
+        [
+            'transitionId1',
+            'transitionId2',
+        ]
+        """
+        def _get_transitions_recursive(result, node):
+            for transition in node.get('transitions'):
+                if transition not in result:
+                    result.append(transition)
+
+            map(partial(_get_transitions_recursive, result), node.get('nodes'))
+
+        result = []
+        map(partial(_get_transitions_recursive, result), self.get_tree())
+
+        return result
+
+    def get_possible_transitions_for_uids(self):
+        """Returns all possible transitions for each node in a dict.
+
+        key = UID of object
+        value = list with possible transitions
+
+        {
+            'uid1': ['transitionId1', 'transitionId2'],
+            'uid2': ['transitionId1', 'transitionId3'],
+        }
+        """
+        def _get_transitions_recursive(result, node):
+            result[node['uid']] = [t.get('id') for t in node['transitions']]
+            map(partial(_get_transitions_recursive, result), node.get('nodes'))
+
+        result = {}
+        map(partial(_get_transitions_recursive, result), self.get_tree())
+
+        return result
+
+    def _generate_tree(self):
         """Generates a nested tree.
         - The root of the tree will be the context
         - The sorting is the plonenavigation sorting
