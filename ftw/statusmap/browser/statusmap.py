@@ -1,7 +1,6 @@
 from ftw.statusmap import _
 from ftw.statusmap.interfaces import IStatusMapFolderTree
 from ftw.statusmap.utils import executeTransition
-from ftw.statusmap.utils import getInfos
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
@@ -35,7 +34,6 @@ class StatusMap(BrowserView):
             has_transitions=len(self.list_transitions()))
 
     def change_states(self):
-        wf_tool = getToolByName(self.context, 'portal_workflow')
         transition = self.request.get('transition', '')
         comment = self.request.get('comment', '')
         uids = self.request.get('uids', [])
@@ -51,8 +49,7 @@ class StatusMap(BrowserView):
             error = True
         if error:
             return
-        executeTransition(
-            self.context, wf_tool, transition, uids, comment)
+        executeTransition(transition, uids, comment)
         msg = _(u'msg_transition_successful',
                 default=u"Transition executed successfully.")
         IStatusMessage(self.request).addStatusMessage(msg, type='info')
