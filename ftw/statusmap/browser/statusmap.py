@@ -1,4 +1,5 @@
 from ftw.statusmap import _
+from ftw.statusmap.interfaces import IStatusMapFolderTree
 from ftw.statusmap.utils import executeTransition
 from ftw.statusmap.utils import getInfos
 from Products.CMFCore.utils import getToolByName
@@ -12,17 +13,14 @@ import json
 class StatusMap(BrowserView):
 
     template = ViewPageTemplateFile("statusmap.pt")
+    template_recursive = ViewPageTemplateFile('statusmap_recurse.pt')
 
     def __init__(self, context, request):
-        self.cat = None
-        self.wf_tool = None
-        self.infos = None
+        self.nodes = []
         super(StatusMap, self).__init__(context, request)
 
     def __call__(self):
-        self.cat = getToolByName(self.context, 'portal_catalog')
-        self.wf_tool = getToolByName(self.context, 'portal_workflow')
-        self.infos = getInfos(self.context, self.cat, self.wf_tool)
+        self.nodes = IStatusMapFolderTree(self.context)()
         if self.request.get('form.submitted'):
             if self.request.get('abort') or self.request.get('back'):
                 return self.request.RESPONSE.redirect(
@@ -30,7 +28,14 @@ class StatusMap(BrowserView):
             self.change_states()
         return self.template()
 
+    def render_status_map(self):
+        return self.template_recursive(
+            nodes=self.nodes,
+            level=0,
+            has_transitions=len(self.list_transitions()))
+
     def change_states(self):
+        wf_tool = getToolByName(self.context, 'portal_workflow')
         transition = self.request.get('transition', '')
         comment = self.request.get('comment', '')
         uids = self.request.get('uids', [])
@@ -47,7 +52,7 @@ class StatusMap(BrowserView):
         if error:
             return
         executeTransition(
-            self.context, self.wf_tool, transition, uids, comment)
+            self.context, wf_tool, transition, uids, comment)
         msg = _(u'msg_transition_successful',
                 default=u"Transition executed successfully.")
         IStatusMessage(self.request).addStatusMessage(msg, type='info')
@@ -55,19 +60,33 @@ class StatusMap(BrowserView):
             self.context.absolute_url() + '/statusmap')
 
     def list_transitions(self):
-        transitions = []
-        for item in self.infos:
-            for transition in item.get('transitions'):
-                if transition not in transitions:
-                    transitions.append(transition)
-        return transitions
+        def _get_transitions_recursive(nodes, result):
+            for node in nodes:
+                for transition in node.get('transitions'):
+                    transition['old_review_state'] = node.get('review_state')
+                    if transition not in result:
+                        result.append(transition)
+
+                children = node.get('nodes', None)
+                if children:
+                    _get_transitions_recursive(children, result)
+
+            return result
+        return _get_transitions_recursive(self.nodes, [])
 
     def get_json(self):
-        result = {}
-        for item in self.infos:
-            result[item['uid']] = [transition.get('id')
-                                   for transition in item['transitions']]
-        return json.dumps(result)
+        def _get_transitions_recursive(nodes, result):
+            for node in nodes:
+                result[node['uid']] = [transition.get('id')
+                                       for transition in node['transitions']]
+
+                children = node.get('nodes', None)
+                if children:
+                    _get_transitions_recursive(children, result)
+
+            return result
+
+        return json.dumps(_get_transitions_recursive(self.nodes, {}))
 
     def get_allowed_transitions(self):
         return "var possible_transitions = %s;" % self.get_json()
