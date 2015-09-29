@@ -1,6 +1,7 @@
 from ftw.statusmap import _
 from ftw.statusmap.interfaces import IStatusMapFolderTree
 from ftw.statusmap.utils import executeTransition
+from functools import partial
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
@@ -14,18 +15,22 @@ class StatusMap(BrowserView):
     template = ViewPageTemplateFile("statusmap.pt")
     template_recursive = ViewPageTemplateFile('statusmap_recurse.pt')
 
-    def __init__(self, context, request):
-        self.nodes = []
-        super(StatusMap, self).__init__(context, request)
-
     def __call__(self):
-        self.nodes = IStatusMapFolderTree(self.context)()
         if self.request.get('form.submitted'):
             if self.request.get('abort') or self.request.get('back'):
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
             self.change_states()
         return self.template()
+
+    @property
+    def nodes(self):
+        """Returns all nodes of the statusmap in a nested dict.
+        """
+        if not getattr(self, '_nodes', None):
+            setattr(self, '_nodes', IStatusMapFolderTree(self.context)())
+
+        return getattr(self, '_nodes')
 
     def render_status_map(self):
         return self.template_recursive(
@@ -57,32 +62,29 @@ class StatusMap(BrowserView):
             self.context.absolute_url() + '/statusmap')
 
     def list_transitions(self):
-        def _get_transitions_recursive(nodes, result):
-            for node in nodes:
-                for transition in node.get('transitions'):
-                    if transition not in result:
-                        result.append(transition)
+        def _get_transitions_recursive(result, node):
+            for transition in node.get('transitions'):
+                if transition not in result:
+                    result.append(transition)
 
-                children = node.get('nodes', None)
-                if children:
-                    _get_transitions_recursive(children, result)
+            map(partial(_get_transitions_recursive, result), node.get('nodes'))
 
-            return result
-        return _get_transitions_recursive(self.nodes, [])
+        result = []
+        map(partial(_get_transitions_recursive, result), self.nodes)
+
+        return result
 
     def get_json(self):
-        def _get_transitions_recursive(nodes, result):
-            for node in nodes:
-                result[node['uid']] = [transition.get('id')
-                                       for transition in node['transitions']]
-
-                children = node.get('nodes', None)
-                if children:
-                    _get_transitions_recursive(children, result)
+        def _get_transitions_recursive(result, node):
+            result[node['uid']] = [t.get('id') for t in node['transitions']]
+            map(partial(_get_transitions_recursive, result), node.get('nodes'))
 
             return result
 
-        return json.dumps(_get_transitions_recursive(self.nodes, {}))
+        result = {}
+        map(partial(_get_transitions_recursive, result), self.nodes)
+
+        return json.dumps(result)
 
     def get_allowed_transitions(self):
         return "var possible_transitions = %s;" % self.get_json()
