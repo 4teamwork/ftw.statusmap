@@ -60,7 +60,6 @@ class StatusMap(BrowserView):
         def _get_transitions_recursive(nodes, result):
             for node in nodes:
                 for transition in node.get('transitions'):
-                    transition['old_review_state'] = node.get('review_state')
                     if transition not in result:
                         result.append(transition)
 

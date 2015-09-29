@@ -1,3 +1,4 @@
+from functools import partial
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from Products.CMFPlone.browser.navigation import get_view_url
@@ -52,7 +53,7 @@ class StatusMapFolderTree(object):
             transitions=self._get_transitions_of_brain(brain),
         )
 
-    def _action_item(self, action):
+    def _action_item(self, review_state, action):
         """Converts a workflow action object into
         an item
         """
@@ -60,19 +61,18 @@ class StatusMapFolderTree(object):
             id=action['id'],
             title=action['title'],
             new_review_state=action.get('transition').new_state_id,
+            old_review_state=review_state,
         )
 
     def _get_transitions_of_brain(self, brain):
         """Returns a dict of all possible workflowactions of the brains
         object
-
-        TODO: This function makes it slow. We need the object.
-        Perhaps we shouldn't render the whole tree?
         """
         obj = brain.getObject()
         actions = self.wf_tool.listActionInfos(object=obj)
         actions = filter(lambda x: x['category'] == 'workflow', actions)
-        return map(self._action_item, actions)
+
+        return map(partial(self._action_item, brain.review_state), actions)
 
     def _make_tree_by_url(self, nodes):
         """Creates a nested tree of nodes from a flat list-like object of nodes.
@@ -83,7 +83,6 @@ class StatusMapFolderTree(object):
         The nodes are changed in place, be sure to make copies first when
         necessary.
         """
-
         for node in nodes:
             node['nodes'] = []
 
