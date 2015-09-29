@@ -113,18 +113,52 @@ class TestStatusMapFolderTree(TestCase):
             )
 
     def test_show_possible_transitions_if_wf_is_defined(self):
-            wf_tool = api.portal.get_tool('portal_workflow')
-            wf_tool.setDefaultChain('simple_publication_workflow')
+        wf_tool = api.portal.get_tool('portal_workflow')
+        wf_tool.setDefaultChain('simple_publication_workflow')
 
-            folder = create(Builder('folder'))
+        folder = create(Builder('folder'))
 
-            tree = IStatusMapFolderTree(folder)()
-            self.assertEqual(
-                'private', tree[0].get('review_state'),
-                "The initialstate should be 'private'")
+        tree = IStatusMapFolderTree(folder)()
+        self.assertEqual(
+            'private', tree[0].get('review_state'),
+            "The initialstate should be 'private'")
 
-            self.assertEqual(
-                ['publish', 'submit'],
-                [action.get('id') for action in tree[0].get('transitions')],
-                "Only possible actions from the initialstate should be listed"
-                )
+        self.assertEqual(
+            ['publish', 'submit'],
+            [action.get('id') for action in tree[0].get('transitions')],
+            "Only possible actions from the initialstate should be listed"
+            )
+
+
+class TestStatusMapFolderTreeHasTransistions(TestCase):
+
+    layer = FTW_STATUSMAP_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+
+    def test_false_if_no_obj_has_a_workflow_transition(self):
+        wf_tool = api.portal.get_tool('portal_workflow')
+        wf_tool.setDefaultChain('one_state_workflow')
+
+        folder = create(Builder('folder'))
+        create(Builder('page').within(folder))
+
+        tree = IStatusMapFolderTree(folder)
+
+        self.assertEqual(False, tree.has_transitions())
+
+    def test_true_it_at_least_one_obj_has_a_transitions(self):
+        wf_tool = api.portal.get_tool('portal_workflow')
+        wf_tool.setDefaultChain('one_state_workflow')
+
+        wf_tool.setChainForPortalTypes(
+            ('Document',), 'simple_publication_workflow')
+
+        folder = create(Builder('folder'))
+        create(Builder('page').within(folder))
+
+        tree = IStatusMapFolderTree(folder)
+
+        self.assertEqual(True, tree.has_transitions())
+
