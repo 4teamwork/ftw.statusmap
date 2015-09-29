@@ -30,55 +30,63 @@
 
           <!-- ACTION -->
           <fieldset class="workflowmap_action" tal:condition="view/has_transitions">
-              <legend i18n:translate="label_transition">Transition</legend>
-                      <tal:repeat_transition
-                              repeat="transition transitions">
-                          <div tal:define="name python:transition.get('id');
-                                           title python:view.get_transition_title(transition)"
-                                  tal:attributes="class string:transition-${name}-colorized;">
-                              <input type="radio"
-                                      onclick="statusmap.selectTransition(this);"
-                                      tal:attributes="value name;
-                                                      id name;
-                                                      name string:transition;
-                                                      "/>
-                              <label class="transitionLabel" tal:attributes="for name" tal:content="python:title" />
-                          </div>
-                      </tal:repeat_transition>
-                      <br />
+            <legend i18n:translate="label_transition">Transition</legend>
+              <tal:transition repeat="transition transitions">
+
+                <div tal:define="name python:transition.get('id');
+                                 title python:view.get_transition_title(transition)"
+                      tal:attributes="class string:transition-${name}-colorized;">
+
+                  <input type="radio"
+                          onclick="statusmap.selectTransition(this);"
+                          tal:attributes="value name;
+                                          id name;
+                                          name string:transition;
+                                          "/>
+                  <label class="transitionLabel" tal:attributes="for name" tal:content="python:title" />
+
+                </div>
+
+              </tal:transition>
           </fieldset>
 
-                      <!-- LISTING -->
-            <table class="listing" summary="Content listing">
-              <thead>
-                <tr>
-                  <th class="nosort" tal:condition="view/has_transitions">
-                    <input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" />
-                  </th>
-                  <th class="nosort" i18n:translate="label_title">Title</th>
-                  <th class="nosort" i18n:translate="label_type">Type</th>
-                  <th class="nosort" i18n:translate="label_status">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                 <tr tal:replace="structure view/render_status_map">Subtree</tr>
-              </tbody>
+          <!-- LISTING -->
+          <table class="listing" summary="Content listing">
+            <thead>
+              <tr>
+
+                <th class="nosort" tal:condition="view/has_transitions">
+                  <input type="checkbox" onclick="javascript:statusmap.toggleCheckboxes(this)" id="select_all" disabled="disabled" />
+                </th>
+                <th class="nosort" i18n:translate="label_title">Title</th>
+                <th class="nosort" i18n:translate="label_type">Type</th>
+                <th class="nosort" i18n:translate="label_status">Status</th>
+
+              </tr>
+            </thead>
+            <tbody>
+               <tr tal:replace="structure view/render_status_map">Subtree</tr>
+            </tbody>
           </table>
 
           <!-- COMMENT -->
           <tal:comment tal:condition="python: transitions">
+
             <div>
               <label for="comment" i18n:translate="label_comment">Comment</label>
             </div>
             <textarea name="comment" id="comment"></textarea>
             <input type="submit" name="submit" i18n:attributes="value label_change" value="Change" class="submit context" />
             <input type="submit" name="abort" i18n:attributes="value label_abort" value="Abort" class="standalone" />
+
           </tal:comment>
 
           <input type="hidden" name="form.submitted" value="1" />
 
           <tal:notransition tal:condition="python: not transitions">
+
             <input type="submit" name="back" i18n:attributes="value label_back" value="Back" class="standalone" />
+
           </tal:notransition>
       </form>
 

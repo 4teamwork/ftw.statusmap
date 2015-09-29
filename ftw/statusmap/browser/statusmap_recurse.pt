@@ -6,9 +6,7 @@
             i18n:domain="ftw.statusmap">
 
   <tal:node repeat="node nodes">
-    <tal:aa define="children node/nodes;">
       <tr tal:attributes="class string:statusMapRow even ${item_wf_state_class}-colorized" tal:define="
-        level               options/level | python:0;
         item_title          node/title;
         item_url            node/url;
         item_type           node/type;
@@ -35,10 +33,9 @@
         <td tal:content="item_wf_state" i18n:translate="" i18n:domain="plone" tal:attributes="class item_wf_state_class"></td>
 
       </tr>
-      <tal:children condition="python: len(children) > 0">
-        <tr tal:replace="structure python:view.template_recursive(nodes=children, level=level+1, has_transitions=has_transitions)">Subtree</tr>
+      <tal:children condition="node/nodes">
+        <tr tal:replace="structure python:view.template_recursive(nodes=node.get('nodes'), level=level+1, has_transitions=has_transitions)">Subtree</tr>
       </tal:children>
-    </tal:aa>
   </tal:node>
 
 </tal:master>
