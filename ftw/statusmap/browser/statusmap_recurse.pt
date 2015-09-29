@@ -7,7 +7,7 @@
 
   <tal:node repeat="node nodes">
     <tal:aa define="children node/nodes;">
-      <tr tal:attributes="class string:even ${item_wf_state_class}-colorized" tal:define="
+      <tr tal:attributes="class string:statusMapRow even ${item_wf_state_class}-colorized" tal:define="
         level               options/level | python:0;
         item_title          node/title;
         item_url            node/url;

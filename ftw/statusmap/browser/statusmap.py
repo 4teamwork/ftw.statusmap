@@ -15,10 +15,11 @@ class StatusMap(BrowserView):
     template_recursive = ViewPageTemplateFile('statusmap_recurse.pt')
 
     def __call__(self):
-        if self.request.get('form.submitted'):
-            if self.request.get('abort') or self.request.get('back'):
+        if self.request.get('abort') or self.request.get('back'):
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
+
+        if self.request.get('form.submitted'):
             self.change_states()
 
         self.update()
@@ -47,7 +48,6 @@ class StatusMap(BrowserView):
             msg = _(u'msg_no_transtion', default=u"Please select a Transition")
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return
-        import pdb; pdb.set_trace()
         if not uids:
             msg = _(u'msg_no_uids', default=u"Please select at least one Item")
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
@@ -83,13 +83,9 @@ class StatusMap(BrowserView):
     def get_translated_type(self, portal_type):
         portal_types = getToolByName(self.context, 'portal_types')
         fti = portal_types.get(portal_type, None)
-        if fti is None:
-            return translate(msgid=portal_type, domain='plone',
-                             context=self.request)
 
-        if not fti.i18n_domain:
-            return translate(msgid=fti.title, domain='plone',
-                             context=self.request)
+        msgid = fti and fti.title or portal_type
+        domain = fti and getattr(fti, 'i18n_domain', 'plone') or 'plone'
 
-        return translate(msgid=fti.title, domain=fti.i18n_domain,
+        return translate(msgid=msgid, domain=domain,
                          context=self.request)

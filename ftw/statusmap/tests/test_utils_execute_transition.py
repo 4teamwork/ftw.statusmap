@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.statusmap.testing import FTW_STATUSMAP_INTEGRATION_TESTING
+from ftw.statusmap.testing import FTW_STATUSMAP_FUNCTIONAL_TESTING
 from ftw.statusmap.utils import executeTransition
 from plone import api
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -9,7 +9,7 @@ from unittest2 import TestCase
 
 class TestTransitionExecution(TestCase):
 
-    layer = FTW_STATUSMAP_INTEGRATION_TESTING
+    layer = FTW_STATUSMAP_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

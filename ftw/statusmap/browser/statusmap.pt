@@ -26,7 +26,7 @@
         <h1 class="documentFirstHeading" i18n:translate="label_workflow_map">Workflow Map</h1>
       </div>
 
-      <form action="" method="POST" tal:define="transitions view/transitions;">
+      <form class="statusMapForm" action="" method="POST" tal:define="transitions view/transitions;">
 
           <!-- ACTION -->
           <fieldset class="workflowmap_action" tal:condition="view/has_transitions">

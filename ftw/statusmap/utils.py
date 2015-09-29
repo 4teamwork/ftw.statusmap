@@ -169,12 +169,8 @@ class StatusMapFolderTree(object):
         navtree_properties = getattr(
             self.portal_properties, 'navtree_properties')
 
-        sort_attribute = navtree_properties.getProperty('sortAttribute', None)
-        if sort_attribute is None:
-            return
+        query['sort_on'] = navtree_properties.getProperty(
+            'sortAttribute', 'getObjPositionInParent')
 
-        query['sort_on'] = sort_attribute
-        sort_order = navtree_properties.getProperty('sortOrder', None)
-
-        if sort_order is not None:
-            query['sort_order'] = sort_order
+        query['sort_order'] = navtree_properties.getProperty(
+            'sortOrder', 'asc')
