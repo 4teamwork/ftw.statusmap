@@ -60,19 +60,33 @@ class StatusMap(BrowserView):
             self.context.absolute_url() + '/statusmap')
 
     def list_transitions(self):
-        transitions = []
-        for node in self.nodes:
-            for transition in node.get('transitions'):
-                if transition not in transitions:
-                    transitions.append(transition)
-        return transitions
+        def _get_transitions_recursive(nodes, result):
+            for node in nodes:
+                for transition in node.get('transitions'):
+                    transition['old_review_state'] = node.get('review_state')
+                    if transition not in result:
+                        result.append(transition)
+
+                children = node.get('nodes', None)
+                if children:
+                    _get_transitions_recursive(children, result)
+
+            return result
+        return _get_transitions_recursive(self.nodes, [])
 
     def get_json(self):
-        result = {}
-        for node in self.nodes:
-            result[node['uid']] = [transition.get('id')
-                                   for transition in node['transitions']]
-        return json.dumps(result)
+        def _get_transitions_recursive(nodes, result):
+            for node in nodes:
+                result[node['uid']] = [transition.get('id')
+                                       for transition in node['transitions']]
+
+                children = node.get('nodes', None)
+                if children:
+                    _get_transitions_recursive(children, result)
+
+            return result
+
+        return json.dumps(_get_transitions_recursive(self.nodes, {}))
 
     def get_allowed_transitions(self):
         return "var possible_transitions = %s;" % self.get_json()

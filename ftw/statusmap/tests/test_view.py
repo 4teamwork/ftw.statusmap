@@ -25,16 +25,18 @@ class TestStatusmapView(TestCase):
         view()
         possible_trans = json.loads(view.get_json())
         self.assertEqual(len(possible_trans), 3)
-        self.assertIn(view.infos[0]['uid'], possible_trans.keys())
-        self.assertIn(view.infos[1]['uid'], possible_trans.keys())
-        self.assertIn(view.infos[2]['uid'], possible_trans.keys())
+        self.assertIn(view.nodes[0]['uid'], possible_trans.keys())
+        self.assertIn(view.nodes[1]['uid'], possible_trans.keys())
+        self.assertIn(
+            view.nodes[0].get('nodes')[0]['uid'], possible_trans.keys())
 
         self.assertEqual(
-            possible_trans[view.infos[0]['uid']], ['publish', 'submit'])
+            possible_trans[view.nodes[0]['uid']], ['publish', 'submit'])
         self.assertEqual(
-            possible_trans[view.infos[1]['uid']], ['publish', 'submit'])
+            possible_trans[view.nodes[1]['uid']], ['publish', 'submit'])
         self.assertEqual(
-            possible_trans[view.infos[2]['uid']], ['publish', 'submit'])
+            possible_trans[view.nodes[0].get('nodes')[0]['uid']],
+            ['publish', 'submit'])
 
         all_trans = view.list_transitions()
 
