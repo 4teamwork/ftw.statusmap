@@ -54,6 +54,7 @@ setup(name='ftw.statusmap',
       zip_safe=False,
 
       install_requires=[
+          'Plone',
           'setuptools',
           'Products.CMFCore',
           'Products.statusmessages',
