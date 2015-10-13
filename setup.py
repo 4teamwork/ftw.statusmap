@@ -5,11 +5,6 @@ version = '1.1.2.dev0'
 maintainer = "Timon Tschanz"
 
 tests_require = [
-    'unittest2',
-    'plone.app.testing',
-    'plone.testing',
-    'transaction',
-    'zope.configuration',
     'ftw.builder',
     'ftw.testbrowser',
     'ftw.testing',
@@ -53,13 +48,12 @@ setup(name='ftw.statusmap',
       zip_safe=False,
 
       install_requires=[
-          'setuptools',
+          'Plone',
           'Products.CMFCore',
           'Products.statusmessages',
-          'Zope2',
-          'zope.i18nmessageid',
-          'zope.publisher',
+          'setuptools',
           'plone.api',
+
           # -*- Extra requirements: -*-
       ],
 
