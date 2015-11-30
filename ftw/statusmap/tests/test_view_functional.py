@@ -48,11 +48,11 @@ class TestStatusmapViewFunctional(TestCase):
             browser.contents)
         self.assertIn(
             '<label class="transitionLabel" for="publish">'
-            'publish - private =&gt; published</label>',
+            'Publish (Private =&gt; Published)</label>',
             browser.contents)
         self.assertIn(
             '<label class="transitionLabel" for="submit">'
-            'submit - private =&gt; pending</label>',
+            'Submit for publication (Private =&gt; Pending review)</label>',
             browser.contents)
 
         browser.post(
@@ -107,9 +107,9 @@ class TestStatusmapViewFunctional(TestCase):
             "So there should be two labels. One for each transition")
 
         self.assertIn(
-            u'ver\xf6ffentlichen - privat => ver\xf6ffentlicht',
+            u'Ver\xf6ffentlichen (Privat => Ver\xf6ffentlicht)',
             [label.text for label in labels])
 
         self.assertIn(
-            u'einreichen - privat => wartend',
+            u'Zur Ver\xf6ffentlichung einreichen (Privat => Zur Redaktion eingereicht)',
             [label.text for label in labels])

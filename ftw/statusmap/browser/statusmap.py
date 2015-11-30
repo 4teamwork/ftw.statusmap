@@ -75,12 +75,12 @@ class StatusMap(BrowserView):
     def get_transition_title(self, transition):
         def _translate(request, msgid):
             return translate(
-                msgid=msgid,
+                msgid=msgid.decode('utf-8'),
                 domain="plone",
                 context=request).encode('utf-8')
 
-        return '{0} - {1} => {2}'.format(
-            _translate(self.request, transition.get('id')),
+        return '{0} ({1} => {2})'.format(
+            _translate(self.request, transition.get('title')),
             _translate(self.request, transition.get('old_review_state')),
             _translate(self.request, transition.get('new_review_state')))
 

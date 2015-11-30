@@ -4,7 +4,9 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Display the human readable title of the transitions and states instead
+  of their id (this is useful if you have ftw.upgrade >= 1.6.2 installed).
+  [mbaechtold]
 
 
 1.2.0 (2015-09-30)

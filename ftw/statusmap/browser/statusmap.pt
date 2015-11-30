@@ -111,9 +111,7 @@
                             </td>
                             <td tal:content="python: view.get_translated_type(node['type'])" style="white-space:nowrap;"></td>
                             <td tal:content="item_wf_state"
-                                        i18n:translate=""
-                                        i18n:domain="plone"
-                                        tal:attributes="class item_wf_state_class"></td>
+                                tal:attributes="class item_wf_state_class"></td>
                         </tr>
                     </tal:block>
                 </tbody>
