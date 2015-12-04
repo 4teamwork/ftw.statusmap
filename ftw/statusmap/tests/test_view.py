@@ -40,12 +40,12 @@ class TestStatusmapView(TestCase):
 
         self.assertEqual(
             all_trans,
-            [{'new_review_state': 'published',
-              'old_review_state': 'private',
+            [{'new_review_state': 'Published',
+              'old_review_state': 'Private',
               'id': 'publish',
               'title': 'Publish'},
-             {'new_review_state': 'pending',
-              'old_review_state': 'private',
+             {'new_review_state': 'Pending review',
+              'old_review_state': 'Private',
               'id': 'submit',
               'title': 'Submit for publication'}])
 

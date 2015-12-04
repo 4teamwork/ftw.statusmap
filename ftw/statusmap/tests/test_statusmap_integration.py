@@ -28,15 +28,15 @@ class TestStatusmap(TestCase):
         for item in result:
             self.assertEqual(
                 item['transitions'],
-                [{'new_review_state': 'published',
-                  'old_review_state': 'private',
+                [{'new_review_state': 'Published',
+                  'old_review_state': 'Private',
                   'id': 'publish',
                   'title': 'Publish'},
-                 {'new_review_state': 'pending',
-                  'old_review_state': 'private',
+                 {'new_review_state': 'Pending review',
+                  'old_review_state': 'Private',
                   'id': 'submit',
                   'title': 'Submit for publication'}])
-            self.assertEqual(item['review_state'], 'private')
+            self.assertEqual(item['review_state'], 'Private')
 
     def test_getInfos_order(self):
         result = getInfos(self.portal, self.cat, self.wf_tool)

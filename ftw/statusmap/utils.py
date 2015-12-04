@@ -5,15 +5,31 @@ def getTransitionsForItem(wf_tool, brains, dicts):
     for index, brain in enumerate(brains):
         obj = brain.getObject()
         actions = wf_tool.listActionInfos(object=obj)
+        old_review_state_title = ''
         avail_actions = []
         for action in actions:
             if action['category'] == 'workflow':
-                avail_actions.append({
-                    'id': action['id'],
-                    'title': action['title'],
-                    'old_review_state': brain.review_state,
-                    'new_review_state': action.get('transition').new_state_id,
-                    })
+                transition = action.get('transition')
+
+                # Construct a dict where the key is the id of the state
+                # and its value is the human readable title of the state.
+                review_state_titles = {}
+                for state in transition.states.items():
+                    review_state_titles[state[0]] = state[1].title
+
+                old_review_state_title = review_state_titles[brain.review_state]
+
+                avail_actions.append(
+                    {
+                        'id': action['id'],
+                        'title': action['title'],
+                        'old_review_state': old_review_state_title,
+                        'new_review_state': review_state_titles[
+                            action.get('transition').new_state_id
+                        ],
+                    }
+                )
+        dicts[index]['review_state'] = old_review_state_title
         dicts[index]['transitions'] = avail_actions
     return dicts
 
