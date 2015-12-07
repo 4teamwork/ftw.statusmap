@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2015-12-07)
 ------------------
 
 - Display the human readable title of the transitions and states instead
