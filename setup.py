@@ -61,6 +61,7 @@ setup(name='ftw.statusmap',
           'Zope2',
           'zope.i18nmessageid',
           'zope.publisher',
+          'ftw.upgrade',
           # -*- Extra requirements: -*-
       ],
 
