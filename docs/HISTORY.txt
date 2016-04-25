@@ -4,7 +4,12 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop Plone 4.1 support.
+  [elioschmutz]
+
+- Adds an IConstraintChecker utility to register constraint checks before
+  transition execution.
+  [elioschmutz]
 
 
 1.2.2 (2016-02-24)

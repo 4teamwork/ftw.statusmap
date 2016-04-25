@@ -24,6 +24,49 @@ Usage
 - Install the generic setup profile.
 
 
+Constraint Checker
+------------------
+
+The ``IConstraintChecker`` utility is used to check if a transaction can be
+executed on an object or not.
+
+It's possible to register multiple ``IConstraintChecker`` utilities and all
+utilities will be executed.
+
+Adding an IConstraintChecker utility
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create your Utility:
+
+.. code:: python
+
+    from ftw.statusmap.interfaces import IConstraintChecker
+    from zope.interface import implements
+
+
+    class MyConstraintCheckerUtility(object):
+        implements(IConstraintChecker)
+
+        def is_transition_allowed(self, obj, transition):
+            return True
+
+Register your utility in zcml.
+
+.. code:: xml
+
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:i18n="http://namespaces.zope.org/i18n"
+        i18n_domain="ftw.statusmap">
+
+        <utility
+          provides="ftw.statusmap.interfaces.IConstraintChecker"
+          name="My Constraint Checker"
+          factory=".checker.MyConstraintCheckerUtility"
+          />
+
+    </configure>
+
 Links
 -----
 
