@@ -1,4 +1,6 @@
+from ftw.statusmap.interfaces import IConstraintChecker
 from plone.app.uuid.utils import uuidToObject
+from zope.component import getUtilitiesFor
 
 
 def getTransitionsForItem(wf_tool, brains, dicts):
@@ -55,6 +57,10 @@ def getBaseInfo(base_path, brains):
 def executeTransition(context, wf_tool, transition, uids, comment):
     for uid in uids:
         obj = uuidToObject(uid)
+
+        if not is_transition_allowed(obj, transition):
+            continue
+
         wf_tool.doActionFor(obj, transition, comment=comment)
 
 
@@ -64,3 +70,11 @@ def getInfos(context, cat, wf_tool):
     items = getBaseInfo(path, brains)
     items = getTransitionsForItem(wf_tool, brains, items)
     return items
+
+
+def is_transition_allowed(obj, transition):
+    for name, checker in getUtilitiesFor(IConstraintChecker):
+        if not checker.is_transition_allowed(obj, transition):
+            return False
+
+    return True
