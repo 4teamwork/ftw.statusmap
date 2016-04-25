@@ -8,7 +8,6 @@ from ftw.statusmap.tests.helpers import unregister_utilities
 from ftw.statusmap.utils import executeTransition
 from ftw.statusmap.utils import is_transition_allowed
 from plone import api
-from Products.CMFCore.utils import getToolByName
 from unittest2 import TestCase
 from zope.component import getGlobalSiteManager
 
@@ -56,10 +55,25 @@ class TestExecuteTransition(TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        self.wf_tool = getToolByName(self.portal, 'portal_workflow')
+        self.wf_tool = api.portal.get_tool('portal_workflow')
         self.wf_tool.setDefaultChain('simple_publication_workflow')
-        self.cat = getToolByName(self.portal, 'portal_catalog')
         self.site_manager = getGlobalSiteManager()
+
+    def test_execution(self):
+        catalog = api.portal.get_tool('portal_catalog')
+
+        folder1 = create(Builder('folder'))
+        folder2 = create(Builder('folder'))
+
+        uids = [
+            folder1.UID(),
+            folder2.UID()
+            ]
+
+        executeTransition(self.portal, self.wf_tool, 'publish', uids, 'Lorem')
+
+        self.assertEqual(
+            len(catalog.searchResults({'review_state': 'published'})), 2)
 
     def test_execute_transition_if_transition_is_allowed(self):
         self.site_manager.registerUtility(
