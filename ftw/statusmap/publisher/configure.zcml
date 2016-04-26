@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="ftw.statusmap">
+
+    <utility
+      provides="ftw.statusmap.interfaces.IConstraintChecker"
+      name="ftw.publisher.constraint.checker"
+      factory="ftw.statusmap.publisher.checker.FtwPublisherConstraintChecker"
+      />
+
+</configure>
