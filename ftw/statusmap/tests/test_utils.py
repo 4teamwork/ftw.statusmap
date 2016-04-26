@@ -4,7 +4,7 @@ from ftw.statusmap.interfaces import IConstraintChecker
 from ftw.statusmap.testing import FTW_STATUSMAP_INTEGRATION_TESTING
 from ftw.statusmap.tests.helpers import DummyCheckerFalse
 from ftw.statusmap.tests.helpers import DummyCheckerTrue
-from ftw.statusmap.tests.helpers import unregister_utilities
+from ftw.statusmap.tests.helpers import unregister_constraint_checkers
 from ftw.statusmap.utils import executeTransition
 from ftw.statusmap.utils import is_transition_allowed
 from plone import api
@@ -46,7 +46,7 @@ class TestIsTransitionAllowed(TestCase):
 
     def tearDown(self):
         super(TestIsTransitionAllowed, self).tearDown()
-        unregister_utilities()
+        unregister_constraint_checkers()
 
 
 class TestExecuteTransition(TestCase):
@@ -107,4 +107,4 @@ class TestExecuteTransition(TestCase):
 
     def tearDown(self):
         super(TestExecuteTransition, self).tearDown()
-        unregister_utilities()
+        unregister_constraint_checkers()

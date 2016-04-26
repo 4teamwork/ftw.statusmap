@@ -18,7 +18,7 @@ class DummyCheckerFalse(object):
         return False
 
 
-def unregister_utilities():
+def unregister_constraint_checkers():
     for name, klass in getUtilitiesFor(IConstraintChecker):
         getGlobalSiteManager().unregisterUtility(
             provided=IConstraintChecker, name=name)
