@@ -4,6 +4,8 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
+- Support ftw.lawgiver status translations. [jone]
+
 - Drop Plone 4.1 support.
   [elioschmutz]
 
