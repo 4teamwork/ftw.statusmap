@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 import os
 
 version = '1.2.3.dev0'
-maintainer = "Timon Tschanz"
 
 tests_require = [
     'unittest2',
@@ -45,7 +44,6 @@ setup(name='ftw.statusmap',
       keywords='ftw statusmap plone workflow tree',
       author='4teamwork AG',
       author_email='mailto:info@4teamwork.ch',
-      maintainer=maintainer,
       url='https://github.com/4teamwork/ftw.statusmap',
       license='GPL2',
 
