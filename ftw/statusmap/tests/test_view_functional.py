@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.statusmap.testing import FTW_STATUSMAP_FUNCTIONAL_TESTING
@@ -113,3 +114,72 @@ class TestStatusmapViewFunctional(TestCase):
         self.assertIn(
             u'Zur Ver\xf6ffentlichung einreichen (Privat => Zur Redaktion eingereicht)',
             [label.text for label in labels])
+
+    @browsing
+    def test_statusmap_on_objects_having_inactive_content(self, browser):
+        # Create a container which will hold the content used for this test.
+        # The container does not play an important role in the test.
+        folder = create(Builder('folder').titled('Container'))
+
+        # Create some content used in this test.
+        create(Builder('folder')
+               .titled('Active Folder')
+               .within(folder))
+        create(Builder('folder')
+               .titled('Inactive Folder')
+               .having(effectiveDate=DateTime() + 10)
+               .within(folder))
+
+        # A user not having the permission to access inactive content can only
+        # change the state of the container and the active folder inside the
+        # container, but not the inactive folder inside the container.
+        # Thus the inactive folder must not be visible in the statusmap view.
+        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        transaction.commit()
+        browser.login().visit(folder, view="@@statusmap")
+        self.assertEqual(
+            ['Container', 'Active Folder'],
+            browser.css('.listing tr td span').text
+        )
+
+        # A manager can also change the state of the inactive folder.
+        # Thus the inactive folder must be visible in the statusmap view too.
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        transaction.commit()
+        browser.login().visit(folder, view="@@statusmap")
+        self.assertEqual(
+            ['Container', 'Active Folder', 'Inactive Folder'],
+            browser.css('.listing tr td span').text
+        )
+
+    @browsing
+    def test_statusmap_on_inactive_content(self, browser):
+        inactive_folder = create(Builder('folder')
+                                 .titled('Inactive Folder')
+                                 .having(effectiveDate=DateTime() + 10)
+                                 .within(self.portal))
+
+        create(Builder('folder')
+               .titled('Active Folder')
+               .within(inactive_folder))
+
+        # A user not having the permission to access inactive content must
+        # be able to change the state of the inactive content itself, i.e.
+        # calling the statusmap view on an inactive context.
+        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        transaction.commit()
+        browser.login().visit(inactive_folder, view="@@statusmap")
+        self.assertEqual(
+            ['Inactive Folder', 'Active Folder'],
+            browser.css('.listing tr td span').text
+        )
+
+        # The same applies to a user having the permission to access inactive
+        # content.
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        transaction.commit()
+        browser.login().visit(inactive_folder, view="@@statusmap")
+        self.assertEqual(
+            ['Inactive Folder', 'Active Folder'],
+            browser.css('.listing tr td span').text
+        )

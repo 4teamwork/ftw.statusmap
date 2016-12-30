@@ -4,7 +4,7 @@ Changelog
 1.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix statusmap view when being called on an inactive content. [mbaechtold]
 
 
 1.4.0 (2016-12-29)

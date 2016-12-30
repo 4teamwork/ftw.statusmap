@@ -67,6 +67,17 @@ def executeTransition(context, wf_tool, transition, uids, comment):
 def getInfos(context, cat, wf_tool):
     path = '/'.join(context.getPhysicalPath())
     brains = cat.searchResults({'path': path, 'sort_on': 'path'})
+
+    # If the context is inactive (expired or in the future) we need to
+    # prepend the brain of the context. Otherwise it won't be listed in
+    # the status map and depending on certain publisher constraints will
+    # lead to a confusing error message.
+    if brains and brains[0].getObject() != context:
+        brains = cat.searchResults(
+            path={'query': path, 'depth': 0},
+            show_inactive=True,
+        ) + brains
+
     items = getBaseInfo(path, brains)
     items = getTransitionsForItem(wf_tool, brains, items)
     return items
