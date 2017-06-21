@@ -5,6 +5,7 @@ version = '1.5.1.dev0'
 
 tests_require = [
     'unittest2',
+    'plone.app.relationfield',
     'plone.app.testing',
     'plone.testing',
     'transaction',
