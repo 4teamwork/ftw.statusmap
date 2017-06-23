@@ -50,6 +50,7 @@ class FtwStatusmapPublisherLayer(FtwStatusmapLayer):
         super(FtwStatusmapPublisherLayer, self).setUpPloneSite(portal)
         applyProfile(portal, 'ftw.publisher.sender:default')
         applyProfile(portal, 'ftw.publisher.sender:example-workflow')
+        applyProfile(portal, 'plone.app.relationfield:default')
 
 
 FTW_STATUSMAP_PUBLISHER_FIXTURE = FtwStatusmapPublisherLayer()
