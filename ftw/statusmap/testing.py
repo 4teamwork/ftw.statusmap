@@ -1,3 +1,4 @@
+from ftw.builder.content import register_dx_content_builders
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
@@ -10,6 +11,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from plone.testing import z2
 from zope.configuration import xmlconfig
 
 
@@ -25,10 +27,13 @@ class FtwStatusmapLayer(PloneSandboxLayer):
             '  <includePluginsOverrides package="plone" />'
             '</configure>',
             context=configurationContext)
+        z2.installProduct(app, 'Products.DateRecurringIndex')
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
         applyProfile(portal, 'ftw.statusmap:default')
+        applyProfile(portal, 'plone.app.contenttypes:default')
+        register_dx_content_builders(force=True)
 
         setRoles(portal, TEST_USER_ID, ['Manager', 'Contributor'])
         login(portal, TEST_USER_NAME)

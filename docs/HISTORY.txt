@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - Fix test suite. [mbaechtold]
+- Add Plone 5.1 support. [tinagerber]
 
 
 1.5.0 (2016-12-30)
