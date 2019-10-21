@@ -5,6 +5,7 @@ version = '1.5.1.dev0'
 
 tests_require = [
     'unittest2',
+    'plone.app.contenttypes',
     'plone.app.relationfield',
     'plone.app.testing',
     'plone.testing',
@@ -15,6 +16,7 @@ tests_require = [
     'ftw.testing',
     'ftw.publisher.sender',
     'plone.api',
+    'Products.DateRecurringIndex',
     ]
 
 
@@ -36,6 +38,7 @@ setup(name='ftw.statusmap',
         "Programming Language :: Python",
         'Framework :: Plone',
         'Framework :: Plone :: 4.3',
+        'Framework :: Plone :: 5.1',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],

@@ -1,4 +1,5 @@
-from DateTime import DateTime
+from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.statusmap.testing import FTW_STATUSMAP_FUNCTIONAL_TESTING
@@ -93,6 +94,7 @@ class TestStatusmapViewFunctional(TestCase):
     @browsing
     def test_transistions_with_translated_start_and_end_state(self, browser):
         lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.addSupportedLanguage('de')
         lang_tool.setDefaultLanguage('de')
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         transaction.commit()
@@ -119,15 +121,15 @@ class TestStatusmapViewFunctional(TestCase):
     def test_statusmap_on_objects_having_inactive_content(self, browser):
         # Create a container which will hold the content used for this test.
         # The container does not play an important role in the test.
-        folder = create(Builder('folder').titled('Container'))
+        folder = create(Builder('folder').titled(u'Container'))
 
         # Create some content used in this test.
         create(Builder('folder')
-               .titled('Active Folder')
+               .titled(u'Active Folder')
                .within(folder))
         create(Builder('folder')
-               .titled('Inactive Folder')
-               .having(effectiveDate=DateTime() + 10)
+               .titled(u'Inactive Folder')
+               .having(effective=datetime.today() + timedelta(10))
                .within(folder))
 
         # A user not having the permission to access inactive content can only
@@ -155,12 +157,12 @@ class TestStatusmapViewFunctional(TestCase):
     @browsing
     def test_statusmap_on_inactive_content(self, browser):
         inactive_folder = create(Builder('folder')
-                                 .titled('Inactive Folder')
-                                 .having(effectiveDate=DateTime() + 10)
+                                 .titled(u'Inactive Folder')
+                                 .having(effective=datetime.today() + timedelta(10))
                                  .within(self.portal))
 
         create(Builder('folder')
-               .titled('Active Folder')
+               .titled(u'Active Folder')
                .within(inactive_folder))
 
         # A user not having the permission to access inactive content must

@@ -67,6 +67,13 @@ Register your utility in zcml.
 
     </configure>
 
+
+Compatibility
+-------------
+
+Runs with `Plone <http://www.plone.org/>`_ `4.3` and `5.1`.
+
+
 Links
 -----
 
